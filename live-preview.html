@@ -1,0 +1,1044 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChairCare Pro â€” Service-First Website & Service Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script><script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    @keyframes pulseRing {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+    @keyframes floatChair {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    .hotspot-pulse { animation: pulseRing 2s infinite; }
+    .float-chair { animation: floatChair 4.5s ease-in-out infinite; }
+    .fade-in { animation: fadeIn 0.35s ease-out forwards; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased selection:bg-emerald-500 selection:text-white pb-24">
+
+  <!-- TOP MASTER HEADER BAR -->
+  <header class="sticky top-0 z-40 bg-[#0B1926] text-white border-b border-white/10 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+      <div onclick="switchMode('website'); switchCustomerPage('home')" class="flex items-center gap-3 cursor-pointer">
+        <div class="w-10 h-10 rounded-xl bg-[#0F9D76] text-white flex items-center justify-center font-extrabold text-base shadow">
+          ðŸª‘
+        </div>
+        <div>
+          <div class="font-extrabold text-base tracking-tight flex items-center gap-2">
+            <span>ChairCare Pro</span>
+            <span class="hidden sm:inline-block text-xs font-bold px-2 py-0.5 rounded bg-amber-500 text-slate-950">
+              SERVICE-FIRST SYSTEM
+            </span>
+          </div>
+          <div class="text-xs text-slate-300 hidden md:block">
+            Bulk Chair Repair â€¢ Old Chair Deep Cleaning â€¢ Corporate AMC &amp; Job CRM
+          </div>
+        </div>
+      </div>
+
+      <!-- 3-MODE SWITCHER -->
+      <div class="flex items-center gap-1.5 bg-white/10 p-1.5 rounded-2xl border border-white/10">
+        <button id="mode-website-btn" onclick="switchMode('website')" class="px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all bg-[#0F9D76] text-white shadow">
+          Customer Website
+        </button>
+        <button id="mode-crm-btn" onclick="switchMode('crm')" class="px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all text-slate-200 hover:text-white flex items-center gap-1.5">
+          <span>Team CRM &amp; Ops</span>
+          <span id="crm-badge-count" class="px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-extrabold text-xs">4</span>
+        </button>
+        <button id="mode-blueprint-btn" onclick="switchMode('blueprint')" class="px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all text-slate-200 hover:text-white">
+          PDF Blueprint
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="live-toast" class="hidden fixed top-20 right-4 z-50 bg-emerald-600 text-white px-4 py-3 rounded-2xl shadow-2xl border border-emerald-300 text-xs font-bold flex items-center gap-2">
+    <span>âœ“</span>
+    <span id="live-toast-text">Action completed</span>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODE 1: CUSTOMER-FACING SERVICE-FIRST WEBSITE                         -->
+  <!-- ===================================================================== -->
+  <div id="view-website" class="space-y-12">
+
+    <!-- Sticky Customer Sub-navigation -->
+    <div class="bg-white border-b border-slate-200 sticky top-16 z-30 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-2 overflow-x-auto">
+        <div class="flex items-center gap-1.5">
+          <button onclick="switchCustomerPage('home')" data-cpage="home" class="cpage-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#13293D] text-white">All Service-First View</button>
+          <button onclick="switchCustomerPage('repair')" data-cpage="repair" class="cpage-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-emerald-500/10">Chair Repair</button>
+          <button onclick="switchCustomerPage('cleaning')" data-cpage="cleaning" class="cpage-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-emerald-500/10">Old Chair Cleaning</button>
+          <button onclick="switchCustomerPage('amc')" data-cpage="amc" class="cpage-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-emerald-500/10">Corporate AMC &amp; Bulk</button>
+          <button onclick="switchCustomerPage('work')" data-cpage="work" class="cpage-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-emerald-500/10">Before / After Work</button>
+          <button onclick="switchCustomerPage('products')" data-cpage="products" class="cpage-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-emerald-500/10">Spares &amp; New Chairs</button>
+          <button onclick="switchCustomerPage('quote')" data-cpage="quote" class="cpage-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-emerald-600 border border-emerald-500/40">Request Quote + Photos</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO SECTION (MATCHING PDF PAGE 1 HEADER & COLORS) -->
+    <section data-section="home" class="csection relative bg-[#13293D] text-white overflow-hidden pt-10 pb-16 -mt-12">
+      <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#1C3A54]/80 pointer-events-none"></div>
+      <div class="absolute top-36 -right-10 w-64 h-64 rounded-full bg-[#0D1E2E]/90 pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-7 space-y-5">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold uppercase tracking-wider">
+              CHAIR SERVICE BUSINESS â€¢ SERVICE-FIRST SYSTEM
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+              BULK CHAIR REPAIR, <br />
+              <span class="text-emerald-400">OLD CHAIR CLEANING</span> &amp; <br />
+              CORPORATE AMC.
+            </h1>
+            <div class="border-l-4 border-amber-500 pl-4 py-1 text-slate-200 text-sm sm:text-base max-w-2xl">
+              Focused on bulk chair repairing, old chair deep bio-cleaning, refurbishment and repeat service business â€” engineered for companies with 20 to 5,000+ chairs.
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3 pt-2">
+              <button onclick="switchCustomerPage('quote')" class="px-5 py-3.5 rounded-2xl bg-[#0F9D76] hover:bg-emerald-500 text-white font-extrabold text-xs sm:text-sm shadow-lg transition-all">
+                ðŸ“¸ Get Quote with Chair Photos &amp; Quantity â†’
+              </button>
+              <button onclick="openModal('whatsapp-modal')" class="px-4 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs sm:text-sm transition-all">
+                ðŸ’¬ WhatsApp Photos
+              </button>
+              <button onclick="openModal('callback-modal')" class="px-4 py-3.5 rounded-2xl bg-amber-500 text-slate-950 font-extrabold text-xs sm:text-sm transition-all">
+                ðŸ“ž Request Callback
+              </button>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-5 border-t border-white/10 text-left">
+              <div>
+                <div class="text-xl font-extrabold text-emerald-400">76% Saved</div>
+                <div class="text-xs text-slate-300">vs Buying New Chairs</div>
+              </div>
+              <div>
+                <div class="text-xl font-extrabold text-amber-400">Controlled</div>
+                <div class="text-xs text-slate-300">Batch Execution</div>
+              </div>
+              <div>
+                <div class="text-xl font-extrabold text-white">100% Photo</div>
+                <div class="text-xs text-slate-300">Before/After Proof</div>
+              </div>
+              <div>
+                <div class="text-xl font-extrabold text-emerald-400">24 Months</div>
+                <div class="text-xs text-slate-300">BIFMA Part Warranty</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Instant Corporate Savings & Batch Calculator -->
+          <div class="lg:col-span-5">
+            <div class="bg-white text-slate-900 rounded-3xl p-6 shadow-2xl border-t-8 border-amber-500">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-extrabold uppercase text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">
+                  Instant Corporate Batch Estimator
+                </span>
+                <span class="text-xs font-bold text-slate-500">Live ROI</span>
+              </div>
+              <h3 class="text-lg font-extrabold text-slate-900 mb-1">
+                Calculate Your Chair Repair &amp; Cleaning Savings
+              </h3>
+              <p class="text-xs text-slate-500 mb-4">
+                Drag slider to set your office chair count:
+              </p>
+
+              <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-4">
+                <div class="flex justify-between text-sm font-bold mb-2">
+                  <span>Chair Quantity:</span>
+                  <span id="hero-calc-qty-label" class="text-emerald-600 font-extrabold text-base">150 Chairs</span>
+                </div>
+                <input id="hero-calc-slider" type="range" min="20" max="600" step="10" value="150" oninput="updateHeroCalc(this.value)" class="w-full accent-emerald-600 cursor-pointer" />
+              </div>
+
+              <div class="grid grid-cols-2 gap-3 mb-4">
+                <div class="bg-rose-50 border border-rose-200 rounded-xl p-3">
+                  <div class="text-xs text-rose-700 font-bold">Buying New Chairs</div>
+                  <div id="hero-new-cost" class="text-base font-extrabold text-rose-900 line-through">â‚¹7,80,000</div>
+                  <div class="text-xs text-rose-600">@ â‚¹5,200/chair</div>
+                </div>
+                <div class="bg-emerald-50 border border-emerald-300 rounded-xl p-3">
+                  <div class="text-xs text-emerald-700 font-bold">Our Repair + Clean</div>
+                  <div id="hero-repair-cost" class="text-base font-extrabold text-emerald-900">â‚¹1,02,000</div>
+                  <div id="hero-savings-badge" class="text-xs text-emerald-700 font-extrabold">Save â‚¹6,78,000!</div>
+                </div>
+              </div>
+
+              <div class="bg-[#13293D] text-white rounded-xl p-3.5 mb-4 flex items-center justify-between">
+                <div>
+                  <div class="text-xs text-amber-400 font-bold uppercase">Batch Turnaround Plan</div>
+                  <div id="hero-batch-plan" class="text-xs font-semibold">Completed in 3 Controlled Batches (~50 chairs/batch)</div>
+                </div>
+                <span class="text-lg">ðŸ›¡ï¸</span>
+              </div>
+
+              <button onclick="prefillQuoteFromHero()" class="w-full py-3 bg-[#0F9D76] hover:bg-emerald-700 text-white font-extrabold rounded-xl text-xs transition-all">
+                Lock This Batch Estimate &amp; Attach Photos â†’
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PDF Signature Bottom Dual-Tone Stripe -->
+      <div class="absolute bottom-0 left-0 right-0 h-2.5 bg-[#0F9D76] flex">
+        <div class="w-44 bg-amber-500 h-full ml-12 sm:ml-24"></div>
+      </div>
+    </section>
+
+    <!-- PDF PAGE 1: OUR GOAL + "NOT JUST A PRODUCT CATALOGUE WITH A CONTACT FORM" -->
+    <section data-section="home" class="csection max-w-7xl mx-auto px-4 sm:px-6 space-y-6">
+      <div>
+        <div class="text-xs font-extrabold uppercase tracking-widest text-[#0F9D76] mb-1">OUR GOAL</div>
+        <h2 class="text-xl sm:text-2xl font-extrabold">
+          Increase service efficiency by making bulk chair repair and cleaning the first thing corporate customers experience.
+        </h2>
+      </div>
+
+      <!-- Exact Dark Banner from Page 1 -->
+      <div class="bg-[#13293D] text-white rounded-2xl p-6 sm:p-8 border-l-8 border-amber-500 shadow-lg">
+        <div class="text-amber-400 font-extrabold text-base sm:text-lg uppercase mb-2">
+          NOT JUST A PRODUCT CATALOGUE WITH A CONTACT FORM.
+        </div>
+        <p class="text-slate-200 text-xs sm:text-sm leading-relaxed max-w-4xl">
+          A complete service-selling system: bring in bulk chair repair and cleaning enquiries, assess them quickly, quote professionally, complete the work in controlled batches, record photo proof, collect payment and win the next maintenance job.
+        </p>
+      </div>
+
+      <!-- 3 Pillars from Page 1 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="bg-[#F2F9F6] text-slate-900 rounded-2xl p-5 border-t-4 border-amber-500 shadow-sm">
+          <h3 class="font-extrabold text-base mb-1.5">Main Income Focus</h3>
+          <p class="text-xs text-slate-600 leading-relaxed mb-3">
+            Chair repairing, deep bio-cleaning, refurbishment, Annual Maintenance Contracts (AMC) and bulk corporate service jobs.
+          </p>
+          <button onclick="switchCustomerPage('repair')" class="text-xs font-extrabold text-emerald-700">Open Repair Lab â†’</button>
+        </div>
+        <div class="bg-[#F2F9F6] text-slate-900 rounded-2xl p-5 border-t-4 border-amber-500 shadow-sm">
+          <h3 class="font-extrabold text-base mb-1.5">Also Shown</h3>
+          <p class="text-xs text-slate-600 leading-relaxed mb-3">
+            New ergonomic chair supply, BIFMA Grade-4 spare parts, hydraulic cylinders, casters and corporate expansion seating.
+          </p>
+          <button onclick="switchCustomerPage('products')" class="text-xs font-extrabold text-emerald-700">Browse Spares &amp; Chairs â†’</button>
+        </div>
+        <div class="bg-[#F2F9F6] text-slate-900 rounded-2xl p-5 border-t-4 border-amber-500 shadow-sm">
+          <h3 class="font-extrabold text-base mb-1.5">What We Build</h3>
+          <p class="text-xs text-slate-600 leading-relaxed mb-3">
+            A service-first website that brings in high-volume enquiries + a live Team Service CRM to track every inspection, quote and batch job.
+          </p>
+          <button onclick="switchMode('crm')" class="text-xs font-extrabold text-emerald-700">Explore Team CRM â†’</button>
+        </div>
+      </div>
+
+      <!-- 6-STEP HOW IT WORKS (PAGE 2 OF PDF) -->
+      <div class="pt-4">
+        <div class="flex items-center gap-2.5 mb-4">
+          <div class="w-1.5 h-7 bg-[#0F9D76] rounded-full"></div>
+          <h3 class="text-xl font-extrabold">How It Works (6-Step Service Pipeline)</h3>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div class="bg-[#F2F9F6] text-slate-900 border-t-4 border-[#0F9D76] p-4 rounded-xl">
+            <div class="text-2xl font-extrabold text-[#0F9D76] mb-1">1</div>
+            <div class="font-bold text-xs mb-1">Customer enquires</div>
+            <div class="text-xs text-slate-600">Via Quote Form, WhatsApp or Callback</div>
+          </div>
+          <div class="bg-[#F2F9F6] text-slate-900 border-t-4 border-[#0F9D76] p-4 rounded-xl">
+            <div class="text-2xl font-extrabold text-[#0F9D76] mb-1">2</div>
+            <div class="font-bold text-xs mb-1">Shares photos &amp; qty</div>
+            <div class="text-xs text-slate-600">Uploads chair photos &amp; total seat count</div>
+          </div>
+          <div class="bg-[#F2F9F6] text-slate-900 border-t-4 border-[#0F9D76] p-4 rounded-xl">
+            <div class="text-2xl font-extrabold text-[#0F9D76] mb-1">3</div>
+            <div class="font-bold text-xs mb-1">We inspect &amp; quote</div>
+            <div class="text-xs text-slate-600">On-site floor tally &amp; formal PDF quote</div>
+          </div>
+          <div class="bg-[#F2F9F6] text-slate-900 border-t-4 border-[#0F9D76] p-4 rounded-xl">
+            <div class="text-2xl font-extrabold text-[#0F9D76] mb-1">4</div>
+            <div class="font-bold text-xs mb-1">Customer approves</div>
+            <div class="text-xs text-slate-600">Locks controlled batch schedule</div>
+          </div>
+          <div class="bg-[#F2F9F6] text-slate-900 border-t-4 border-[#0F9D76] p-4 rounded-xl">
+            <div class="text-2xl font-extrabold text-[#0F9D76] mb-1">5</div>
+            <div class="font-bold text-xs mb-1">Repair / clean + proof</div>
+            <div class="text-xs text-slate-600">Executed in batches with photo proof</div>
+          </div>
+          <div class="bg-[#F2F9F6] text-slate-900 border-t-4 border-[#0F9D76] p-4 rounded-xl">
+            <div class="text-2xl font-extrabold text-[#0F9D76] mb-1">6</div>
+            <div class="font-bold text-xs mb-1">Invoice &amp; follow-up</div>
+            <div class="text-xs text-slate-600">Payment + 6-month repeat AMC alert</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE CHAIR ANATOMY & REPAIR DIAGNOSTIC LAB -->
+    <section data-section="repair" class="csection max-w-7xl mx-auto px-4 sm:px-6 space-y-6">
+      <div class="flex items-center gap-2.5">
+        <div class="w-1.5 h-8 bg-[#0F9D76] rounded-full"></div>
+        <div>
+          <span class="text-xs font-extrabold uppercase text-[#0F9D76]">INTERACTIVE CHAIR REPAIR DIAGNOSTIC</span>
+          <h2 class="text-xl sm:text-2xl font-extrabold">Click Any Hotspot on the Chair to Inspect &amp; Price Batch Repairs</h2>
+        </div>
+      </div>
+
+      <div class="bg-[#13293D] text-white rounded-3xl p-6 lg:p-8 border border-emerald-500/30 shadow-xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <!-- SVG Chair with 6 Pulsing Hotspots -->
+        <div class="lg:col-span-5 bg-slate-900/80 rounded-2xl p-6 flex flex-col items-center justify-center relative min-h-[360px] border border-white/10">
+          <div class="relative w-64 h-72 float-chair">
+            <svg viewBox="0 0 240 300" class="w-full h-full">
+              <!-- Headrest -->
+              <rect x="85" y="16" width="70" height="24" rx="10" fill="#1e3a5f" stroke="#38bdf8" stroke-width="1.5" />
+              <!-- Backrest Mesh -->
+              <path d="M74 50 Q120 44 166 50 L160 142 Q120 148 80 142 Z" fill="#0f2233" stroke="#10b981" stroke-width="2" />
+              <rect x="79" y="106" width="82" height="16" rx="6" fill="#0f9d76" fill-opacity="0.5" stroke="#34d399" stroke-width="1.2" />
+              <!-- Armrests -->
+              <path d="M52 122 L80 122 L76 130 L50 130 Z" fill="#f59e0b" />
+              <path d="M62 130 L62 162 L78 162" fill="none" stroke="#94a3b8" stroke-width="5" stroke-linecap="round" />
+              <path d="M160 122 L188 122 L190 130 L164 130 Z" fill="#f59e0b" />
+              <path d="M178 130 L178 162 L162 162" fill="none" stroke="#94a3b8" stroke-width="5" stroke-linecap="round" />
+              <!-- Seat Cushion -->
+              <rect x="68" y="144" width="104" height="24" rx="11" fill="#0f9d76" stroke="#6ee7b7" stroke-width="2" />
+              <!-- Tilt Mechanism -->
+              <rect x="96" y="168" width="48" height="18" rx="4" fill="#1e293b" stroke="#f59e0b" stroke-width="2" />
+              <!-- Gas Lift -->
+              <rect x="113" y="186" width="14" height="58" rx="3" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2" />
+              <!-- 5-Star Base & Casters -->
+              <path d="M120 240 L56 262 M120 240 L84 268 M120 240 L120 270 M120 240 L156 268 M120 240 L184 262" stroke="#cbd5e1" stroke-width="6" stroke-linecap="round" />
+              <circle cx="56" cy="272" r="8" fill="#0f172a" stroke="#10b981" stroke-width="2.5" />
+              <circle cx="84" cy="278" r="8" fill="#0f172a" stroke="#10b981" stroke-width="2.5" />
+              <circle cx="120" cy="280" r="8" fill="#0f172a" stroke="#10b981" stroke-width="2.5" />
+              <circle cx="156" cy="278" r="8" fill="#0f172a" stroke="#10b981" stroke-width="2.5" />
+              <circle cx="184" cy="272" r="8" fill="#0f172a" stroke="#10b981" stroke-width="2.5" />
+            </svg>
+
+            <!-- 6 Interactive Hotspot Buttons -->
+            <button onclick="selectHotspot(0)" style="left:50%; top:72%" class="hotspot-btn hotspot-pulse absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-amber-500 text-slate-950 font-extrabold text-xs shadow-lg">1</button>
+            <button onclick="selectHotspot(1)" style="left:32%; top:88%" class="hotspot-btn absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-emerald-500 text-white font-extrabold text-xs shadow-lg">2</button>
+            <button onclick="selectHotspot(2)" style="left:53%; top:60%" class="hotspot-btn absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-emerald-500 text-white font-extrabold text-xs shadow-lg">3</button>
+            <button onclick="selectHotspot(3)" style="left:26%; top:46%" class="hotspot-btn absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-emerald-500 text-white font-extrabold text-xs shadow-lg">4</button>
+            <button onclick="selectHotspot(4)" style="left:48%; top:50%" class="hotspot-btn absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-emerald-500 text-white font-extrabold text-xs shadow-lg">5</button>
+            <button onclick="selectHotspot(5)" style="left:52%; top:28%" class="hotspot-btn absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-emerald-500 text-white font-extrabold text-xs shadow-lg">6</button>
+          </div>
+          <div class="text-xs text-slate-300 mt-2">Click numbers 1â€“6 on the chair to inspect part specs</div>
+        </div>
+
+        <!-- Selected Hotspot Details Panel -->
+        <div class="lg:col-span-7 bg-white/5 border border-white/15 rounded-2xl p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span id="hs-badge" class="px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-400/30">
+              Saves 88% vs buying a new chair
+            </span>
+            <span id="hs-time" class="text-xs text-emerald-300 font-semibold">â± 12 mins on-site per chair</span>
+          </div>
+          <h3 id="hs-title" class="text-xl sm:text-2xl font-extrabold text-white">
+            1. BIFMA Class-4 Hydraulic Gas Lift Replacement
+          </h3>
+          <div class="bg-rose-500/15 border-l-4 border-rose-400 p-3 rounded-r-xl">
+            <div class="text-xs font-bold text-rose-300 uppercase">Common Corporate Symptom</div>
+            <p id="hs-symptom" class="text-xs sm:text-sm text-slate-200 mt-0.5">
+              Chair sinks automatically when seated or refuses to lock at ergonomic desk height.
+            </p>
+          </div>
+          <div class="bg-emerald-500/15 border-l-4 border-emerald-400 p-3 rounded-r-xl">
+            <div class="text-xs font-bold text-emerald-300 uppercase">Industrial Replacement Spec</div>
+            <p id="hs-spec" class="text-xs sm:text-sm text-slate-200 mt-0.5">
+              Heavy-duty nitrogen-charged ANSI/BIFMA Class-4 chrome cylinder (150kg load rating, 24-month warranty).
+            </p>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3 bg-slate-900/90 p-4 rounded-xl border border-white/10">
+            <div>
+              <div class="text-xs text-slate-400">Unit Repair Price</div>
+              <div id="hs-price" class="text-lg sm:text-xl font-extrabold text-emerald-400">â‚¹480 / chair</div>
+            </div>
+            <div>
+              <div class="text-xs text-slate-400">50-Chair Batch</div>
+              <div id="hs-batch-price" class="text-lg sm:text-xl font-extrabold text-white">â‚¹24,000</div>
+            </div>
+            <div>
+              <div class="text-xs text-slate-400">Warranty</div>
+              <div id="hs-warranty" class="text-base sm:text-lg font-extrabold text-amber-400">24 Months</div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-3 pt-1">
+            <button onclick="switchCustomerPage('quote')" class="px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs transition-all">
+              + Add Component to Bulk Quote Request â†’
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OLD CHAIR DEEP CLEANING SECTION -->
+    <section data-section="cleaning" class="csection max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="bg-[#F2F9F6] text-slate-900 rounded-3xl p-6 sm:p-8 border-t-4 border-[#0F9D76] shadow-sm space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase text-[#0F9D76]">OLD CHAIR BIO-CLEANING &amp; SANITIZATION</span>
+            <h2 class="text-xl sm:text-2xl font-extrabold mt-0.5">5-Stage Wet Injection-Extraction &amp; 140Â°C Steam Cleaning</h2>
+            <p class="text-xs text-slate-600 mt-1">Removes 3+ years of sweat, coffee stains, dust mites, and odor from mesh, fabric, and leatherette chairs.</p>
+          </div>
+          <button onclick="switchCustomerPage('quote')" class="px-4 py-2.5 rounded-xl bg-[#13293D] text-white font-extrabold text-xs self-start">
+            Book Free 2-Chair Sample Demo â†’
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <div class="bg-white p-4 rounded-2xl border border-emerald-200">
+            <div class="text-xs font-extrabold text-[#0F9D76]">STAGE 01</div>
+            <div class="font-bold text-sm mt-1">Dry HEPA Vacuum</div>
+            <p class="text-xs text-slate-600 mt-1">Extracts deep dust &amp; crumbs from mesh pores and seat seams.</p>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-emerald-200">
+            <div class="text-xs font-extrabold text-[#0F9D76]">STAGE 02</div>
+            <div class="font-bold text-sm mt-1">Bio-Foam Scrubbing</div>
+            <p class="text-xs text-slate-600 mt-1">Breaks down collar oil, sweat rings, and coffee spills safely.</p>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-emerald-200">
+            <div class="text-xs font-extrabold text-[#0F9D76]">STAGE 03</div>
+            <div class="font-bold text-sm mt-1">Hot Water Extraction</div>
+            <p class="text-xs text-slate-600 mt-1">High-suction machine pulls out 95% of dirty water from cushion foam.</p>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-emerald-200">
+            <div class="text-xs font-extrabold text-[#0F9D76]">STAGE 04</div>
+            <div class="font-bold text-sm mt-1">140Â°C Steam Sanitize</div>
+            <p class="text-xs text-slate-600 mt-1">Kills 99.9% bacteria &amp; fungi on armrests, handles, and headrests.</p>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-emerald-200">
+            <div class="text-xs font-extrabold text-[#0F9D76]">STAGE 05</div>
+            <div class="font-bold text-sm mt-1">Caster &amp; Base Polish</div>
+            <p class="text-xs text-slate-600 mt-1">Removes tangled hair from wheels + silicone smooth-roll spray.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPLETED WORK: INTERACTIVE DRAGGABLE BEFORE / AFTER PHOTO SLIDER -->
+    <section data-section="work" class="csection max-w-7xl mx-auto px-4 sm:px-6 space-y-5">
+      <div class="flex items-center gap-2.5">
+        <div class="w-1.5 h-8 bg-[#0F9D76] rounded-full"></div>
+        <div>
+          <span class="text-xs font-extrabold uppercase text-[#0F9D76]">COMPLETED WORK WITH PHOTO PROOF</span>
+          <h2 class="text-xl sm:text-2xl font-extrabold">Drag the Slider to Compare Before vs After Batch Restoration</h2>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center bg-white border border-slate-200 rounded-3xl p-6 shadow-md">
+        <div class="lg:col-span-7 relative h-72 rounded-2xl overflow-hidden select-none bg-slate-900">
+          <!-- AFTER LAYER -->
+          <div class="absolute inset-0 bg-gradient-to-br from-emerald-950 via-teal-900 to-slate-900 flex items-center justify-center p-6">
+            <span class="absolute top-3 right-3 px-3 py-1 rounded-full bg-emerald-500 text-white text-xs font-extrabold">
+              âœ“ AFTER: RESTORED &amp; STEAM SANITIZED
+            </span>
+            <div class="text-center">
+              <div class="text-4xl mb-2">ðŸª‘âœ¨</div>
+              <div class="text-white font-extrabold text-base">450 CyberPark Mesh Chairs â€” Like Brand New</div>
+              <div class="text-emerald-300 text-xs mt-1">New Class-4 Gas Lifts + Bio-Foam Extraction + Silent PU Casters</div>
+            </div>
+          </div>
+
+          <!-- BEFORE LAYER (CLIPPED) -->
+          <div id="ba-before-layer" style="clip-path: inset(0 48% 0 0);" class="absolute inset-0 bg-gradient-to-br from-stone-900 via-rose-950 to-slate-900 flex items-center justify-center p-6">
+            <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-amber-500 text-slate-950 text-xs font-extrabold">
+              âš  BEFORE: SINKING &amp; HEAVILY STAINED
+            </span>
+            <div class="text-center">
+              <div class="text-4xl mb-2">ðŸª‘ðŸ”§</div>
+              <div class="text-amber-200 font-extrabold text-base">142 Sinking Cylinders &amp; 3-Year Sweat/Coffee Stains</div>
+              <div class="text-rose-200 text-xs mt-1">Jammed Nylon Wheels + Peeling Armrest Pads</div>
+            </div>
+          </div>
+
+          <!-- Divider Line -->
+          <div id="ba-divider" style="left: 52%;" class="absolute top-0 bottom-0 w-1 bg-white pointer-events-none">
+            <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-9 h-9 rounded-full bg-white text-slate-900 font-extrabold text-xs flex items-center justify-center shadow-xl border-2 border-emerald-500">
+              â†”
+            </div>
+          </div>
+
+          <input type="range" min="5" max="95" value="52" oninput="updateBeforeAfter(this.value)" class="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-20" />
+        </div>
+
+        <div class="lg:col-span-5 space-y-3">
+          <span class="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-600 text-xs font-extrabold">
+            Verified Batch Proof â€¢ 450 Chairs â€¢ â‚¹18.4 Lakhs Saved
+          </span>
+          <h3 class="text-lg font-extrabold">Global IT Park â€” 3 Floors Executed in 6 Weekend Batches</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Every batch of 75 chairs was barcode-tagged, repaired on-site with BIFMA Class-4 gas lifts, wet-extracted, and verified with timestamped Before/After photos prior to invoice release.
+          </p>
+          <div class="p-3.5 rounded-xl bg-emerald-500/10 border-l-4 border-[#0F9D76] text-xs italic">
+            "Instead of spending â‚¹24 Lakhs replacing 450 chairs, their crew restored every chair over two weekends with full photo proof."
+            <div class="font-bold not-italic mt-1">â€” VP Corporate Real Estate</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CORPORATE AMC & SPARES (COMBINED COMPACT SHOWCASE) -->
+    <section data-section="amc" class="csection max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-[#13293D] text-white rounded-3xl p-6 border-t-4 border-amber-500 space-y-3">
+          <span class="text-xs font-extrabold uppercase text-amber-400">REPEAT REVENUE ENGINE</span>
+          <h3 class="text-xl font-extrabold">Corporate Annual Maintenance Contract (AMC)</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Quarterly preventive checkups, bolt torque-tightening, free hydraulic gas lift &amp; caster replacements, and bi-annual deep foam cleaning at â‚¹590/chair/year.
+          </p>
+          <button onclick="switchCustomerPage('quote')" class="px-4 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-extrabold text-xs">
+            Request AMC Proposal â†’
+          </button>
+        </div>
+
+        <div data-section="products" class="bg-[#F2F9F6] text-slate-900 rounded-3xl p-6 border-t-4 border-[#0F9D76] space-y-3">
+          <span class="text-xs font-extrabold uppercase text-[#0F9D76]">ALSO SHOWN: SPARES &amp; NEW CHAIRS</span>
+          <h3 class="text-xl font-extrabold">BIFMA Spare Parts &amp; New Corporate Seating</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Class-4 Gas Lifts (â‚¹480), Twin PU Caster Sets (â‚¹350), Synchro-Tilt Mechanisms (â‚¹750), Chrome 5-Star Bases, and new Ergonomic Mesh Chairs for expanding teams.
+          </p>
+          <button onclick="switchCustomerPage('quote')" class="px-4 py-2.5 rounded-xl bg-[#13293D] text-white font-extrabold text-xs">
+            Enquire Spares / New Chairs â†’
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUOTE REQUEST FORM WITH CHAIR PHOTOS & QUANTITY (DIRECTLY FEEDS TEAM CRM) -->
+    <section data-section="quote" id="quote-form-anchor" class="csection max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="bg-white text-slate-900 rounded-3xl border-2 border-emerald-500/40 shadow-xl overflow-hidden">
+        <div class="bg-[#13293D] text-white p-6 border-b-4 border-amber-500 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase text-emerald-400">LIVE WEBSITE-TO-CRM INTEGRATION</span>
+            <h2 class="text-xl sm:text-2xl font-extrabold mt-0.5">Request Quote with Chair Photos &amp; Quantity</h2>
+            <p class="text-xs text-slate-300">Submit this form and watch it appear immediately inside the Team CRM &amp; Ops Portal!</p>
+          </div>
+        </div>
+
+        <form onsubmit="submitCustomerQuote(event)" class="p-6 space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Company Name *</label>
+              <input id="q-company" type="text" required placeholder="e.g. Infosys Campus / FinCorp" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Contact Person *</label>
+              <input id="q-contact" type="text" required placeholder="e.g. Rahul Verma (Admin)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Phone / WhatsApp *</label>
+              <input id="q-phone" type="text" required placeholder="+91 98200 XXXXX" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Service Type *</label>
+              <select id="q-service" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white">
+                <option value="Repair + Deep Cleaning">Bulk Chair Repair + Deep Cleaning</option>
+                <option value="Bulk Repair">Bulk Chair Repair Only</option>
+                <option value="Old Chair Cleaning">Old Chair Deep Cleaning Only</option>
+                <option value="Corporate AMC">Annual Maintenance Contract (AMC)</option>
+                <option value="New Chairs & Spares">New Chairs &amp; Genuine Spares</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Chair Quantity *</label>
+              <input id="q-qty" type="number" min="5" max="5000" value="150" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold" />
+            </div>
+          </div>
+
+          <div class="bg-slate-50 p-4 rounded-2xl border border-dashed border-emerald-400">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <span class="text-xs font-extrabold text-emerald-800">ðŸ“¸ Attached Chair Defect Photos (Click presets to add):</span>
+              <div class="flex flex-wrap gap-1.5">
+                <button type="button" onclick="addPhotoTag('Sunken_GasLift_Bay2.jpg')" class="px-2.5 py-1 rounded-lg bg-white border border-slate-300 text-xs font-semibold hover:border-emerald-500">+ Sunken_GasLift.jpg</button>
+                <button type="button" onclick="addPhotoTag('Stained_Mesh_Floor4.jpg')" class="px-2.5 py-1 rounded-lg bg-white border border-slate-300 text-xs font-semibold hover:border-emerald-500">+ Stained_Mesh.jpg</button>
+                <button type="button" onclick="addPhotoTag('Broken_Casters_Batch.jpg')" class="px-2.5 py-1 rounded-lg bg-white border border-slate-300 text-xs font-semibold hover:border-emerald-500">+ Broken_Casters.jpg</button>
+              </div>
+            </div>
+            <div id="q-photo-tags" class="flex flex-wrap gap-2 text-xs"></div>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 rounded-xl bg-[#0F9D76] hover:bg-emerald-700 text-white font-extrabold text-xs shadow-lg transition-all">
+            Submit Enquiry &amp; Open in Team Service CRM â†’
+          </button>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODE 2: TEAM SERVICE MANAGEMENT PORTAL (WHAT YOUR TEAM CAN DO)        -->
+  <!-- ===================================================================== -->
+  <div id="view-crm" class="hidden max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+    <div class="bg-[#13293D] text-white rounded-3xl p-6 sm:p-8 border-b-4 border-[#0F9D76] shadow-xl">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div>
+          <span class="text-xs font-extrabold uppercase text-amber-400">WHAT YOUR TEAM CAN DO â€¢ INTERNAL SERVICE SYSTEM</span>
+          <h1 class="text-2xl sm:text-3xl font-extrabold mt-1">Enquiry, Site Inspection, Quotation &amp; Batch Job Tracker</h1>
+          <p class="text-xs text-slate-300 mt-1">Track every enquiry, record site inspections, send formal quotes, assign technicians, verify before/after photos, and collect payment.</p>
+        </div>
+        <div class="flex gap-3 bg-white/10 p-3.5 rounded-2xl">
+          <div>
+            <div class="text-xs text-slate-300">Active Enquiries</div>
+            <div id="crm-stat-enq" class="text-xl font-extrabold text-emerald-400">4</div>
+          </div>
+          <div class="border-l border-white/15 pl-3">
+            <div class="text-xs text-slate-300">Chairs in Pipeline</div>
+            <div id="crm-stat-chairs" class="text-xl font-extrabold text-amber-400">710</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 CRM Sub-Tabs matching Page 2 of PDF -->
+      <div class="flex items-center gap-2 mt-6 pt-4 border-t border-white/10 overflow-x-auto">
+        <button onclick="switchCrmTab('enquiries')" data-crmtab="enquiries" class="crm-tab-btn px-3.5 py-2 rounded-xl text-xs font-extrabold bg-[#0F9D76] text-white">1. Enquiries &amp; Follow-Up</button>
+        <button onclick="switchCrmTab('inspections')" data-crmtab="inspections" class="crm-tab-btn px-3.5 py-2 rounded-xl text-xs font-extrabold bg-white/10 text-slate-200">2. Site Inspections</button>
+        <button onclick="switchCrmTab('quotations')" data-crmtab="quotations" class="crm-tab-btn px-3.5 py-2 rounded-xl text-xs font-extrabold bg-white/10 text-slate-200">3. Pro Quotations</button>
+        <button onclick="switchCrmTab('jobs')" data-crmtab="jobs" class="crm-tab-btn px-3.5 py-2 rounded-xl text-xs font-extrabold bg-white/10 text-slate-200">4. Batch Jobs &amp; Techs</button>
+        <button onclick="switchCrmTab('invoices')" data-crmtab="invoices" class="crm-tab-btn px-3.5 py-2 rounded-xl text-xs font-extrabold bg-white/10 text-slate-200">5. Invoices &amp; Reports</button>
+      </div>
+    </div>
+
+    <!-- CRM TAB 1: ENQUIRIES -->
+    <div id="crm-panel-enquiries" class="crm-panel space-y-3"></div>
+
+    <!-- CRM TAB 2: SITE INSPECTIONS -->
+    <div id="crm-panel-inspections" class="crm-panel hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-white text-slate-900 p-5 rounded-2xl border border-slate-200 space-y-2">
+        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded">INSP-501 â€¢ NexaCore IT Solutions</span>
+        <h4 class="font-extrabold text-base">185 Chairs Audited by Rajesh K. (Floor 4 &amp; 5)</h4>
+        <div class="grid grid-cols-3 gap-2 bg-slate-50 p-3 rounded-xl text-xs font-bold text-center">
+          <div>64 Gas Lifts</div>
+          <div>40 Caster Sets</div>
+          <div>185 Deep Clean</div>
+        </div>
+        <p class="text-xs text-slate-600">All defective chairs barcode-tagged #NC-001 to #NC-185. Recommended 3 weekend batches.</p>
+      </div>
+      <div class="bg-white text-slate-900 p-5 rounded-2xl border border-slate-200 space-y-2">
+        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded">INSP-502 â€¢ Apex FinServe Corporate HQ</span>
+        <h4 class="font-extrabold text-base">120 Chairs Audited by Vikram S. (Floor 8)</h4>
+        <div class="grid grid-cols-3 gap-2 bg-slate-50 p-3 rounded-xl text-xs font-bold text-center">
+          <div>19 Gas Lifts</div>
+          <div>12 Mechanisms</div>
+          <div>120 AMC Tagged</div>
+        </div>
+        <p class="text-xs text-slate-600">25 Executive leatherette chairs + 95 ergonomic mesh task chairs. Quoted Comprehensive AMC.</p>
+      </div>
+    </div>
+
+    <!-- CRM TAB 3: PROFESSIONAL QUOTATION DOCUMENT -->
+    <div id="crm-panel-quotations" class="crm-panel hidden">
+      <div class="bg-white text-slate-900 rounded-3xl border-2 border-slate-200 p-6 sm:p-8 shadow-lg space-y-5">
+        <div class="flex flex-wrap justify-between gap-4 border-b-2 border-slate-200 pb-4">
+          <div>
+            <div class="text-xs font-extrabold text-[#0F9D76]">FORMAL CORPORATE QUOTATION DOCUMENT</div>
+            <h3 class="text-xl font-extrabold">Quotation #QT-883 â€” NexaCore IT Solutions Pvt Ltd</h3>
+            <p class="text-xs text-slate-500">Batch Plan: 3 Controlled Batches (65 + 60 + 60 chairs) â€¢ Warranty: 24 Months on BIFMA Gas Lifts</p>
+          </div>
+          <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-[#13293D] text-white text-xs font-extrabold self-start">
+            ðŸ–¨ Print / Export PDF Quote
+          </button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="border-b border-slate-200 text-slate-500 uppercase">
+                <th class="py-2">Service / Spare Part Item</th>
+                <th class="py-2 text-right">Chair Qty</th>
+                <th class="py-2 text-right">Unit Rate</th>
+                <th class="py-2 text-right">Total</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 font-semibold">
+              <tr><td class="py-2.5">BIFMA Class-4 Hydraulic Gas Lift Replacement</td><td class="py-2.5 text-right">64</td><td class="py-2.5 text-right">â‚¹480</td><td class="py-2.5 text-right">â‚¹30,720</td></tr>
+              <tr><td class="py-2.5">Silent Twin-Wheel PU Caster Set (5 Wheels/Chair)</td><td class="py-2.5 text-right">40</td><td class="py-2.5 text-right">â‚¹350</td><td class="py-2.5 text-right">â‚¹14,000</td></tr>
+              <tr><td class="py-2.5">Synchronized Multi-Lock Tilt Mechanism</td><td class="py-2.5 text-right">22</td><td class="py-2.5 text-right">â‚¹750</td><td class="py-2.5 text-right">â‚¹16,500</td></tr>
+              <tr><td class="py-2.5">5-Stage Bio-Enzymatic Deep Foam &amp; Steam Sanitization</td><td class="py-2.5 text-right">185</td><td class="py-2.5 text-right">â‚¹230</td><td class="py-2.5 text-right">â‚¹42,550</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="flex justify-end pt-3 border-t border-slate-200">
+          <div class="text-right">
+            <div class="text-xs text-slate-500">Total (Incl. 18% GST):</div>
+            <div class="text-xl font-extrabold text-emerald-700">â‚¹1,22,448</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CRM TAB 4: BATCH JOB SCHEDULING & PHOTO PROOF -->
+    <div id="crm-panel-jobs" class="crm-panel hidden">
+      <div class="bg-white text-slate-900 rounded-3xl border border-slate-200 p-6 space-y-4">
+        <div class="flex flex-wrap justify-between items-center gap-2">
+          <div>
+            <h3 class="text-lg font-extrabold">JOB-901 â€¢ NexaCore IT Solutions (185 Chairs in 3 Controlled Batches)</h3>
+            <p class="text-xs text-slate-500">Assigned Crew: Rajesh Kumar &amp; 4 Technicians â€¢ Mandatory Before/After Photo Proof</p>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-extrabold">Batch 1 &amp; 2 Photo Proof Verified</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-xs space-y-1.5">
+            <div class="font-extrabold text-emerald-900">Batch 1: Floor 4 East (65 Chairs)</div>
+            <div>âœ“ Before Photo â€¢ âœ“ After Photo Verified</div>
+            <div class="font-bold text-emerald-700">Status: COMPLETED</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-xs space-y-1.5">
+            <div class="font-extrabold text-emerald-900">Batch 2: Floor 4 West (60 Chairs)</div>
+            <div>âœ“ Before Photo â€¢ âœ“ After Photo Verified</div>
+            <div class="font-bold text-emerald-700">Status: COMPLETED</div>
+          </div>
+          <div id="batch-3-card" class="p-4 rounded-2xl bg-amber-50 border border-amber-300 text-xs space-y-2">
+            <div class="font-extrabold text-slate-900">Batch 3: Floor 5 Bay (60 Chairs)</div>
+            <div id="batch-3-photo-status">âœ“ Before Photo â€¢ â³ Awaiting After Photo</div>
+            <button onclick="completeBatch3()" class="w-full py-2 rounded-xl bg-[#13293D] text-white font-extrabold text-xs">
+              âœ“ Capture After Photo &amp; Complete Batch 3
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CRM TAB 5: INVOICES, REPEAT FOLLOW-UP & REPORTS -->
+    <div id="crm-panel-invoices" class="crm-panel hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-white text-slate-900 rounded-2xl border border-slate-200 p-5 space-y-2">
+        <span class="text-xs font-extrabold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded">INV-2026-412 â€¢ PAID IN FULL</span>
+        <h4 class="font-extrabold text-base">MedLife Multi-Specialty Hospital (95 Chairs) â€” â‚¹92,500</h4>
+        <p class="text-xs text-emerald-700 font-bold">ðŸ”„ Next Repeat Service Follow-Up Auto-Scheduled: 03 Apr 2027</p>
+      </div>
+      <div class="bg-[#13293D] text-white rounded-2xl p-5 space-y-2">
+        <span class="text-xs font-extrabold text-amber-400">SERVICE-FIRST BUSINESS REPORT</span>
+        <h4 class="font-extrabold text-base">78% Revenue Generated from Repair, Cleaning &amp; AMC</h4>
+        <p class="text-xs text-slate-300">2,840 corporate chairs currently tracked under 6-month repeat service reminders.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODE 3: INTERACTIVE PDF REQUIREMENT BLUEPRINT                         -->
+  <!-- ===================================================================== -->
+  <div id="view-blueprint" class="hidden max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+    <div class="bg-[#13293D] text-white rounded-3xl p-6 sm:p-8 border-b-4 border-emerald-500">
+      <div class="text-xs font-bold uppercase text-emerald-400">100% PDF SPECIFICATION COVERAGE</div>
+      <h2 class="text-2xl font-extrabold mt-1">All 15 First-Release Deliverables &amp; 4-Stage Launch Plan</h2>
+      <p class="text-xs text-slate-300 mt-1">Click any item below to jump directly to that live module.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-[#F2F9F6] text-slate-900 border-t-4 border-[#0F9D76] p-4 rounded-xl">
+        <div class="font-extrabold text-sm">1. Get more enquiries</div>
+        <div class="text-xs text-slate-600 my-1">Service-first homepage, WhatsApp &amp; photo quote form</div>
+        <span class="text-xs font-extrabold text-amber-600">Launch First</span>
+      </div>
+      <div class="bg-[#F2F9F6] text-slate-900 border-t-4 border-[#0F9D76] p-4 rounded-xl">
+        <div class="font-extrabold text-sm">2. Run jobs smoothly</div>
+        <div class="text-xs text-slate-600 my-1">Site inspection record, PDF quotation &amp; batch scheduler</div>
+        <span class="text-xs font-extrabold text-amber-600">High Value</span>
+      </div>
+      <div class="bg-[#F2F9F6] text-slate-900 border-t-4 border-[#0F9D76] p-4 rounded-xl">
+        <div class="font-extrabold text-sm">3. Win repeat business</div>
+        <div class="text-xs text-slate-600 my-1">Before/after photo proof, invoice status &amp; 6-month follow-up</div>
+        <span class="text-xs font-extrabold text-emerald-700">Scale</span>
+      </div>
+      <div class="bg-[#F2F9F6] text-slate-900 border-t-4 border-[#13293D] p-4 rounded-xl">
+        <div class="font-extrabold text-sm">4. Extra automation</div>
+        <div class="text-xs text-slate-600 my-1">Interactive Chair Diagnostic Lab &amp; instant ROI estimator</div>
+        <span class="text-xs font-extrabold text-slate-500">Included Bonus</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING WHATSAPP, CALL & CALLBACK BAR -->
+  <div class="fixed bottom-4 right-4 z-40 flex items-center gap-2 bg-[#13293D]/95 backdrop-blur-md p-2 rounded-2xl border border-white/15 shadow-2xl">
+    <button onclick="openModal('whatsapp-modal')" class="px-3.5 py-2 rounded-xl bg-[#0F9D76] text-white font-extrabold text-xs">
+      ðŸ’¬ WhatsApp Photos
+    </button>
+    <button onclick="openModal('callback-modal')" class="px-3.5 py-2 rounded-xl bg-amber-500 text-slate-950 font-extrabold text-xs">
+      ðŸ“ž Instant Callback
+    </button>
+  </div>
+
+  <!-- WHATSAPP MODAL -->
+  <div id="whatsapp-modal" class="hidden fixed inset-0 z-50 bg-slate-950/70 flex items-center justify-center p-4">
+    <div class="bg-white text-slate-900 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border-t-8 border-[#0F9D76]">
+      <div class="flex justify-between items-center">
+        <h3 class="font-extrabold text-base">ðŸ’¬ WhatsApp Bulk Chair Photo Quote</h3>
+        <button onclick="closeModal('whatsapp-modal')" class="text-xs font-bold text-slate-500">âœ• Close</button>
+      </div>
+      <p class="text-xs text-slate-600">Simulate sending 3 chair photos &amp; 140 chair count via WhatsApp directly into the Team CRM:</p>
+      <button onclick="logWhatsAppLead()" class="w-full py-3 rounded-xl bg-[#0F9D76] text-white font-extrabold text-xs">
+        Send 3 Chair Photos &amp; Log to Team CRM â†’
+      </button>
+    </div>
+  </div>
+
+  <!-- CALLBACK MODAL -->
+  <div id="callback-modal" class="hidden fixed inset-0 z-50 bg-slate-950/70 flex items-center justify-center p-4">
+    <div class="bg-white text-slate-900 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border-t-8 border-amber-500">
+      <div class="flex justify-between items-center">
+        <h3 class="font-extrabold text-base">ðŸ“ž Request 15-Min Service Callback</h3>
+        <button onclick="closeModal('callback-modal')" class="text-xs font-bold text-slate-500">âœ• Close</button>
+      </div>
+      <input id="cb-phone-input" type="text" placeholder="Enter Mobile Number (+91 98XXX XXXXX)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs" />
+      <button onclick="logCallbackLead()" class="w-full py-3 rounded-xl bg-[#13293D] text-white font-extrabold text-xs">
+        Request Callback &amp; Alert Team CRM â†’
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const hotspots = [
+      { title: '1. BIFMA Class-4 Hydraulic Gas Lift Replacement', badge: 'Saves 88% vs buying a new chair', time: 'â± 12 mins on-site per chair', symptom: 'Chair sinks automatically when seated or refuses to lock at ergonomic desk height.', spec: 'Heavy-duty nitrogen-charged ANSI/BIFMA Class-4 chrome cylinder (150kg load rating).', price: 480, warranty: '24 Months' },
+      { title: '2. Silent Twin-Wheel PU Caster Set (5 Wheels)', badge: 'Saves 92% vs replacement', time: 'â± 10 mins on-site per chair', symptom: 'Jammed plastic rollers, hair buildup, or scratching expensive office floor tiles.', spec: '360Â° non-marking Polyurethane (PU) silent twin casters + 5-star base load test.', price: 350, warranty: '18 Months' },
+      { title: '3. Synchronized Multi-Lock Tilt Mechanism', badge: 'Saves 82% vs replacement', time: 'â± 18 mins on-site per chair', symptom: 'Loud metallic creaking, broken recline lock lever, or unsafe backward lean.', spec: '3.2mm cold-rolled steel synchro-tilt plate with tension adjustment & anti-shock.', price: 750, warranty: '18 Months' },
+      { title: '4. Soft-Touch PU Armrest Pads & 3D Brackets', badge: 'Saves 90% vs replacement', time: 'â± 10 mins on-site per chair', symptom: 'Cracked, peeling PU foam pads or wobbly armrest height adjustment buttons.', spec: 'High-density molded ergonomic PU top pads or complete T-arm assembly.', price: 420, warranty: '12 Months' },
+      { title: '5. High-Density 55D Molded Seat Cushion & Extraction', badge: '100% Showroom Comfort', time: 'â± 25 mins per chair', symptom: 'Flattened foam causing tailbone pain, coffee/sweat stains, and embedded dust.', spec: '55-density virgin molded foam + commercial fabric upholstery & steam extraction.', price: 650, warranty: '24 Months' },
+      { title: '6. Breathable Elastomer Mesh & Lumbar Support', badge: 'Extends Chair Life 5+ Yrs', time: 'â± 20 mins per chair', symptom: 'Sagging mesh backrest, frayed edges, or snapped lower-back lumbar support.', spec: 'High-tensile breathable mesh re-tensioning + adjustable lumbar pad restoration.', price: 590, warranty: '18 Months' }
+    ];
+
+    let photoTags = ['Floor4_MeshChairs.jpg', 'Sinking_GasLift.jpg'];
+    let enquiries = [
+      { id: 'ENQ-2041', company: 'NexaCore IT Solutions Pvt Ltd', contact: 'Arjun Mehta', qty: 185, service: 'Repair + Deep Cleaning', status: 'Approved - In Batch', source: 'Website Quote', photos: 6, value: 118400 },
+      { id: 'ENQ-2042', company: 'Apex FinServe Corporate HQ', contact: 'Priya Nair', qty: 120, service: 'Corporate AMC', status: 'Quoted (#QT-884)', source: 'WhatsApp Photos', photos: 4, value: 86000 },
+      { id: 'ENQ-2043', company: 'CloudHive Co-Working Spaces', contact: 'Rohan Deshmukh', qty: 310, service: 'Old Chair Cleaning', status: 'Inspection Scheduled', source: 'Website Quote', photos: 5, value: 74400 },
+      { id: 'ENQ-2044', company: 'MedLife Multi-Specialty Hospital', contact: 'Suresh Iyer', qty: 95, service: 'Full Refurbishment', status: 'Completed & Invoiced', source: 'Instant Callback', photos: 3, value: 92500 }
+    ];
+
+    function showToast(msg) {
+      const t = document.getElementById('live-toast');
+      document.getElementById('live-toast-text').textContent = msg;
+      t.classList.remove('hidden');
+      setTimeout(() => t.classList.add('hidden'), 4000);
+    }
+
+    function switchMode(mode) {
+      ['website', 'crm', 'blueprint'].forEach(m => {
+        document.getElementById('view-' + m).classList.toggle('hidden', m !== mode);
+        const btn = document.getElementById('mode-' + m + '-btn');
+        if (m === mode) {
+          btn.className = 'px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all bg-[#0F9D76] text-white shadow flex items-center gap-1.5';
+        } else {
+          btn.className = 'px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all text-slate-200 hover:text-white flex items-center gap-1.5';
+        }
+      });
+      if (mode === 'crm') renderEnquiries();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function switchCustomerPage(page) {
+      document.querySelectorAll('.cpage-btn').forEach(btn => {
+        const active = btn.getAttribute('data-cpage') === page;
+        btn.className = active
+          ? 'cpage-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#13293D] text-white'
+          : 'cpage-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-emerald-500/10';
+      });
+      document.querySelectorAll('.csection').forEach(sec => {
+        const secType = sec.getAttribute('data-section');
+        if (page === 'home' || secType === page || (page === 'products' && secType === 'amc')) {
+          sec.classList.remove('hidden');
+        } else {
+          sec.classList.add('hidden');
+        }
+      });
+    }
+
+    function selectHotspot(idx) {
+      const h = hotspots[idx];
+      document.getElementById('hs-title').textContent = h.title;
+      document.getElementById('hs-badge').textContent = h.badge;
+      document.getElementById('hs-time').textContent = h.time;
+      document.getElementById('hs-symptom').textContent = h.symptom;
+      document.getElementById('hs-spec').textContent = h.spec;
+      document.getElementById('hs-price').textContent = 'â‚¹' + h.price + ' / chair';
+      document.getElementById('hs-batch-price').textContent = 'â‚¹' + (h.price * 50).toLocaleString('en-IN');
+      document.getElementById('hs-warranty').textContent = h.warranty;
+    }
+
+    function updateHeroCalc(val) {
+      const qty = Number(val);
+      const newCost = qty * 5200;
+      const repairCost = qty * 680;
+      const saved = newCost - repairCost;
+      const batches = Math.max(1, Math.ceil(qty / 50));
+      document.getElementById('hero-calc-qty-label').textContent = qty + ' Chairs';
+      document.getElementById('hero-new-cost').textContent = 'â‚¹' + newCost.toLocaleString('en-IN');
+      document.getElementById('hero-repair-cost').textContent = 'â‚¹' + repairCost.toLocaleString('en-IN');
+      document.getElementById('hero-savings-badge').textContent = 'Save â‚¹' + saved.toLocaleString('en-IN') + '!';
+      document.getElementById('hero-batch-plan').textContent = 'Completed in ' + batches + ' Controlled Batches (~50 chairs/batch)';
+    }
+
+    function prefillQuoteFromHero() {
+      const qty = document.getElementById('hero-calc-slider').value;
+      document.getElementById('q-qty').value = qty;
+      switchCustomerPage('quote');
+    }
+
+    function updateBeforeAfter(val) {
+      document.getElementById('ba-before-layer').style.clipPath = `inset(0 ${100 - val}% 0 0)`;
+      document.getElementById('ba-divider').style.left = val + '%';
+    }
+
+    function renderPhotoTags() {
+      const container = document.getElementById('q-photo-tags');
+      container.innerHTML = photoTags.map((tag, i) =>
+        `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-100 text-emerald-900 font-bold text-xs">
+          ðŸ“¸ ${tag}
+          <button type="button" onclick="removePhotoTag(${i})" class="text-rose-600 font-extrabold">Ã—</button>
+        </span>`
+      ).join('');
+    }
+
+    function addPhotoTag(name) {
+      if (!photoTags.includes(name)) {
+        photoTags.push(name);
+        renderPhotoTags();
+      }
+    }
+
+    function removePhotoTag(idx) {
+      photoTags.splice(idx, 1);
+      renderPhotoTags();
+    }
+
+    function submitCustomerQuote(e) {
+      e.preventDefault();
+      const company = document.getElementById('q-company').value;
+      const contact = document.getElementById('q-contact').value;
+      const qty = Number(document.getElementById('q-qty').value) || 100;
+      const service = document.getElementById('q-service').value;
+
+      const newEnq = {
+        id: 'ENQ-' + (2041 + enquiries.length),
+        company,
+        contact,
+        qty,
+        service,
+        status: 'New Enquiry',
+        source: 'Website Quote Form',
+        photos: photoTags.length,
+        value: qty * 640
+      };
+      enquiries.unshift(newEnq);
+      updateCrmBadges();
+      showToast(`Enquiry ${newEnq.id} (${qty} chairs) sent to Team Service CRM!`);
+      switchMode('crm');
+      switchCrmTab('enquiries');
+    }
+
+    function updateCrmBadges() {
+      document.getElementById('crm-badge-count').textContent = enquiries.length;
+      document.getElementById('crm-stat-enq').textContent = enquiries.length;
+      const totalChairs = enquiries.reduce((s, e) => s + e.qty, 0);
+      document.getElementById('crm-stat-chairs').textContent = totalChairs;
+    }
+
+    function renderEnquiries() {
+      const panel = document.getElementById('crm-panel-enquiries');
+      panel.innerHTML = enquiries.map((e, idx) => `
+        <div class="bg-white text-slate-900 rounded-2xl border border-slate-200 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
+          <div class="space-y-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded bg-[#13293D] text-white font-bold text-xs">${e.id}</span>
+              <span class="px-2.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-xs">${e.qty} Chairs â€¢ ${e.service}</span>
+              <span class="px-2.5 py-0.5 rounded bg-amber-50 text-amber-800 font-semibold text-xs">${e.source} (${e.photos} Photos)</span>
+            </div>
+            <h4 class="font-extrabold text-base">${e.company} â€” <span class="text-slate-600 font-medium">${e.contact}</span></h4>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="text-right">
+              <div class="text-xs text-slate-400">Est. Batch Value</div>
+              <div class="text-sm font-extrabold">â‚¹${e.value.toLocaleString('en-IN')}</div>
+            </div>
+            <span class="px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-900 font-extrabold text-xs">${e.status}</span>
+            <button onclick="advanceEnq(${idx})" class="px-3 py-1.5 rounded-xl bg-[#13293D] hover:bg-emerald-600 text-white font-bold text-xs">Advance â†’</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function advanceEnq(idx) {
+      const stages = ['New Enquiry', 'Inspection Scheduled', 'Quoted', 'Approved - In Batch', 'Completed & Invoiced'];
+      const curr = stages.indexOf(enquiries[idx].status);
+      enquiries[idx].status = stages[Math.min(stages.length - 1, curr + 1)];
+      renderEnquiries();
+      showToast(`Advanced ${enquiries[idx].id} to ${enquiries[idx].status}`);
+    }
+
+    function switchCrmTab(tab) {
+      document.querySelectorAll('.crm-panel').forEach(p => p.classList.add('hidden'));
+      document.getElementById('crm-panel-' + tab).classList.remove('hidden');
+      document.querySelectorAll('.crm-tab-btn').forEach(b => {
+        const active = b.getAttribute('data-crmtab') === tab;
+        b.className = active
+          ? 'crm-tab-btn px-3.5 py-2 rounded-xl text-xs font-extrabold bg-[#0F9D76] text-white'
+          : 'crm-tab-btn px-3.5 py-2 rounded-xl text-xs font-extrabold bg-white/10 text-slate-200';
+      });
+    }
+
+    function completeBatch3() {
+      const card = document.getElementById('batch-3-card');
+      card.className = 'p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-xs space-y-1.5';
+      document.getElementById('batch-3-photo-status').textContent = 'âœ“ Before Photo â€¢ âœ“ After Photo Verified';
+      showToast('Batch 3 Before/After photo proof verified! All 185 chairs completed.');
+    }
+
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+    function logWhatsAppLead() {
+      enquiries.unshift({
+        id: 'ENQ-' + (2041 + enquiries.length),
+        company: 'WhatsApp Corporate Lead',
+        contact: 'Facility Desk',
+        qty: 140,
+        service: 'Repair + Deep Cleaning',
+        status: 'New Enquiry',
+        source: 'WhatsApp Photos',
+        photos: 3,
+        value: 89600
+      });
+      updateCrmBadges();
+      closeModal('whatsapp-modal');
+      showToast('WhatsApp Photo Enquiry (140 Chairs) logged into Team CRM!');
+      switchMode('crm');
+    }
+
+    function logCallbackLead() {
+      enquiries.unshift({
+        id: 'ENQ-' + (2041 + enquiries.length),
+        company: 'Instant Callback Lead',
+        contact: document.getElementById('cb-phone-input').value || '+91 98201 00991',
+        qty: 85,
+        service: 'Bulk Repair',
+        status: 'New Enquiry',
+        source: 'Instant Callback',
+        photos: 1,
+        value: 51000
+      });
+      updateCrmBadges();
+      closeModal('callback-modal');
+      showToast('Callback Request logged into Team Service CRM!');
+      switchMode('crm');
+    }
+
+    // Initialize default state
+    renderPhotoTags();
+    renderEnquiries();
+  </script>
+</body>
+</html>
+
